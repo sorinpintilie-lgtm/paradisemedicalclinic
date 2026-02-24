@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradise Medical Clinic - Clinică Stomatologică București</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Setări generale */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+
+        /* Variabile - Tema Roșie Paradise Medical Clinic */
+        :root {
+            --promo-height: 40px;
+            --promo-safe-top: env(safe-area-inset-top, 0px);
+            --promo-total: calc(var(--promo-height) + var(--promo-safe-top));
+            
+            --primary: #ba131a; 
+            --primary-hover: #960f15; 
+            --emergency: #ea580c; 
+            --emergency-light: #fff7ed;
+            --text-main: #334155; 
+            --text-heading: #0f172a;
+            --bg-light: #f8fafc;
+            --surface: #ffffff;
+        }
+
+        body { 
+            color: var(--text-main); line-height: 1.7; background-color: var(--bg-light); 
+            padding-top: var(--promo-total); overflow-x: hidden;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        /* Butoane */
+        .btn { 
+            display: inline-block; background-color: var(--primary); color: #fff; padding: 14px 28px; 
+            border-radius: 50px; font-weight: 600; letter-spacing: 0.5px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: 0 4px 15px rgba(186, 19, 26, 0.3); 
+            border: none; cursor: pointer;
+        }
+        .btn:hover { 
+            background-color: var(--primary-hover); 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 20px rgba(186, 19, 26, 0.4); 
+        }
+
+        /* Promo Bar */
+        .promo-bar {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
+            background-color: #FDE047; color: #422006; height: var(--promo-height);
+            padding-top: var(--promo-safe-top); box-sizing: content-box; font-size: 13.5px; font-weight: 500;
+        }
+        .promo-container { height: 100%; max-width: 1240px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; }
+        .promo-desktop { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 15px; }
+        .promo-text { white-space: nowrap; }
+        .promo-text a { color: #854d0e; font-weight: 600; transition: color 0.2s;}
+        .promo-text a:hover { color: #a16207; text-decoration: none; }
+        .promo-btn {
+            background-color: #ca8a04; color: white; padding: 5px 14px;
+            border-radius: 20px; font-size: 13px; font-weight: 600; transition: all 0.3s;
+        }
+        .promo-btn:hover { background-color: #a16207; transform: scale(1.05); }
+
+        .promo-mobile { display: none; width: 100%; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; }
+        .promo-mobile .truncate { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .promo-mobile .no-wrap { white-space: nowrap; flex-shrink: 0; }
+        .promo-mobile a { color: #854d0e; font-weight: 600; flex-shrink: 0; }
+
+        /* Header & Navigație Desktop - Fundal Roșu Paradise */
+        header { 
+            background-color: rgba(186, 19, 26, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            color: #fff; padding: 15px 5%; display: flex; justify-content: space-between; 
+            align-items: center; position: sticky; top: var(--promo-total); z-index: 9000; 
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .logo a, .footer-logo-link { display: flex; align-items: center; gap: 12px; text-decoration: none;}
+        
+        /* Filtrăm logoul roșu ca să devină alb pentru a se vedea pe fundalul roșu */
+        .logo img, .footer-logo-link img, .mobile-nav-header img { 
+            max-height: 42px; width: auto; 
+            filter: brightness(0) invert(1); 
+        }
+        
+        .logo-text { display: flex; flex-direction: column; text-align: left; }
+        .logo-text .name { font-size: 1.25rem; font-weight: 700; color: #ffffff; line-height: 1.1; letter-spacing: -0.5px;}
+        .logo-text .title { font-size: 0.65rem; font-weight: 500; color: rgba(255, 255, 255, 0.85); letter-spacing: 2.5px; text-transform: uppercase; margin-top: 3px; }
+
+        nav ul { list-style: none; display: flex; gap: 24px; align-items: center; }
+        nav a { font-weight: 500; font-size: 0.95rem; color: rgba(255, 255, 255, 0.85); transition: color 0.3s; }
+        nav a:hover { color: #fff; }
+        .mobile-nav-header { display: none; }
+
+        /* Meniu Hamburger Icon */
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 10001; position: relative; }
+        .hamburger span { display: block; width: 25px; height: 3px; background-color: #fff; border-radius: 3px; transition: all 0.3s ease; }
+
+        /* Hero Section */
+        .hero { 
+            background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.7)), url('hero.jpg') center/cover; 
+            color: #fff; text-align: center; padding: 120px 20px; min-height: 100vh; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+        }
+        .hero h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 20px; letter-spacing: -1px; line-height: 1.2; }
+        .hero p { font-size: 1.25rem; max-width: 650px; margin-bottom: 35px; font-weight: 300; color: #f1f5f9; }
+
+        /* Secțiuni standard */
+        section { padding: 80px 10%; text-align: center; }
+        section h2 { font-size: 2.4rem; font-weight: 700; margin-bottom: 50px; color: var(--text-heading); position: relative; letter-spacing: -0.5px; }
+        section h2::after { content: ''; display: block; width: 50px; height: 4px; background: var(--primary); margin: 16px auto 0; border-radius: 2px; }
+
+        /* Secțiunea Despre */
+        .about-content { display: flex; flex-wrap: wrap; gap: 50px; align-items: center; max-width: 1050px; margin: 0 auto; text-align: left; }
+        .about-image { flex: 1; min-width: 300px; width: 100%; max-width: 480px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); object-fit: cover; }
+        .about-text-wrapper { flex: 2; min-width: 300px; font-size: 1.15rem; color: var(--text-main); }
+        .about-text-wrapper strong { color: var(--text-heading); }
+
+        /* Container Servicii - 4 Coloane */
+        .services-wrapper { position: relative; max-width: 1200px; margin: 0 auto; }
+        .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+        .slider-dots { display: none; }
+
+        .service-card { 
+            background: var(--surface); padding: 30px 20px; border-radius: 16px; 
+            border: 1px solid #f1f5f9; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04); 
+            transition: all 0.4s ease; display: flex; flex-direction: column; justify-content: flex-start; text-align: left;
+        }
+        .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(186, 19, 26, 0.08); border-color: #ffdada; }
+        .service-card h3 { margin: 15px 0 10px; font-size: 1.15rem; color: var(--text-heading); font-weight: 600; line-height: 1.3;}
+        .service-card p { font-size: 0.9rem; color: #64748b; margin-bottom: 0; line-height: 1.5;}
+        .service-icon {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 56px; height: 56px; 
+            background-color: #fff0f0; 
+            color: var(--primary);
+            border-radius: 14px; margin-bottom: 5px; transition: all 0.4s;
+        }
+        .service-card:hover .service-icon { background-color: var(--primary); color: #fff; transform: scale(1.05) rotate(-5deg); }
+
+        /* Contact */
+        .contact-container { display: flex; flex-wrap: wrap; gap: 50px; justify-content: center; text-align: left; max-width: 1100px; margin: 0 auto;}
+        .contact-info, .map-container { flex: 1; min-width: 300px; }
+        .contact-icon { display: inline-block; vertical-align: middle; margin-right: 12px; color: var(--primary); }
+        .contact-info p { margin-bottom: 20px; font-size: 1.1rem; display: flex; align-items: center;}
+        .contact-info strong { color: var(--text-heading); margin-right: 5px; min-width: 70px;}
+        .contact-info .btn { margin-top: 15px; }
+
+        /* Footer - Fundal Roșu Paradise */
+        footer { background: var(--primary); color: #fdf2f2; padding: 70px 5% 30px; margin-top: 60px; font-size: 0.95rem; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; max-width: 1200px; margin: 0 auto 40px; text-align: left; }
+        .footer-col h4 { color: #fff; font-size: 1.2rem; margin-bottom: 20px; font-weight: 600; }
+        .footer-col p { margin-bottom: 10px; line-height: 1.6; color: rgba(255, 255, 255, 0.9); }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 12px; }
+        .footer-col ul a { color: rgba(255, 255, 255, 0.9); transition: color 0.3s; }
+        .footer-col ul a:hover { color: #fff; text-decoration: underline; }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); }
+
+        /* Responsive & Mobile Config */
+        @media (max-width: 1200px) {
+            .services-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 992px) {
+            section { padding: 60px 5%; }
+
+        }
+
+        @media (max-width: 768px) {
+            .promo-desktop { display: none; }
+            .promo-mobile { display: flex; }
+            header { padding: 15px 20px; }
+            .hamburger { display: flex; }
+            
+            nav {
+                position: fixed; top: 0; left: -100%; width: 100vw; height: 100vh;
+                background-color: rgba(186, 19, 26, 0.98); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+                z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
+                transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            nav.active { left: 0; }
+            
+            .mobile-nav-header {
+                display: flex; flex-direction: column; align-items: center; margin-bottom: 50px; text-align: center; width: 100%;
+            }
+            .mobile-nav-header img { max-height: 70px; margin-bottom: 15px; }
+            .mobile-nav-header .logo-text { align-items: center; text-align: center; } 
+            .mobile-nav-header .logo-text .name { font-size: 1.8rem; }
+            .mobile-nav-header .logo-text .title { font-size: 0.85rem; }
+
+            nav ul { flex-direction: column; gap: 25px; width: 100%; }
+            nav ul li { text-align: center; }
+            nav a { font-size: 1.4rem; font-weight: 600; color: #f8fafc; display: block; width: 100%; }
+            
+            .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .hamburger.active span:nth-child(2) { opacity: 0; }
+            .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+            .hero { padding: 80px 20px; background-image: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.7)), url('hero-mobile.jpg'); justify-content: flex-end; padding-bottom: 40px; min-height: 80vh; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1.1rem; }
+            .contact-container { flex-direction: column; }
+            .financing { margin: 0 5%; padding: 40px 20px; }
+
+            .services-grid {
+                display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+                scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
+                gap: 20px; padding-bottom: 10px;
+            }
+            .services-grid::-webkit-scrollbar { display: none; }
+            .services-grid { -ms-overflow-style: none; scrollbar-width: none; }
+            .service-card { min-width: 100%; scroll-snap-align: center; }
+            
+            .slider-dots { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 20px; padding: 0 10px; }
+            .dot { width: 8px; height: 8px; border-radius: 50%; background: #cbd5e1; cursor: pointer; transition: all 0.3s ease; }
+            .dot.active { background: var(--primary); width: 24px; border-radius: 4px; }
+
+
+        }
+    </style>
+</head>
+<body>
+
+    <div class="promo-bar">
+        <div class="promo-container">
+            <div class="promo-desktop">
+                <span class="promo-text">
+                    Concept demo • Conținut orientativ • Dezvoltat de sky.ro •
+                    <a href="mailto:dan.trifan@sky.ro">dan.trifan@sky.ro</a> •
+                    <a href="tel:+40720088880">+4 0720 088 880</a>
+                </span>
+                <a href="https://wa.me/40720088880" target="_blank" rel="noopener noreferrer" class="promo-btn">WhatsApp</a>
+            </div>
+            <div class="promo-mobile">
+                <div class="truncate">Concept demo</div>
+                <div class="no-wrap">Dezvoltat de sky.ro</div>
+                <a href="tel:+40720088880">+4 0720 088 880</a>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <a href="#">
+                <img src="logo.png" alt="Paradise Medical Clinic Logo">
+                <div class="logo-text">
+                    <span class="name">Paradise Medical Clinic</span>
+                    <span class="title">CLINICĂ STOMATOLOGICĂ</span>
+                </div>
+            </a>
+        </div>
+        
+        <div class="hamburger" aria-label="Deschide meniul de navigare">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <nav>
+            <div class="mobile-nav-header">
+                <img src="logo.png" alt="Paradise Medical Clinic Logo">
+                <div class="logo-text">
+                    <span class="name">Paradise Medical Clinic</span>
+                    <span class="title">CLINICĂ STOMATOLOGICĂ</span>
+                </div>
+            </div>
+
+            <ul>
+                <li><a href="#despre">Despre</a></li>
+                <li><a href="#servicii">Servicii</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Zâmbiți, vă rog!</h1>
+        <p>Focusul nostru este să oferim tratamente de calitate și îngrijire dentară la cele mai înalte standarde pentru pacienții din București.</p>
+        <a href="#contact" class="btn">Programează o vizită</a>
+    </section>
+
+    <section id="despre">
+        <h2>Despre Dr. Glicsman</h2>
+        <div class="about-content">
+            <img src="despre.jpg" alt="Dr. Glicsman" class="about-image">
+            <div class="about-text-wrapper">
+                <p><strong>Licențiat al Facultății de Medicină și Farmacie "Carol Davila"</strong>, din București, din anul 1997 – Specialitatea Medicină Dentară și Implantologie. Este membru activ al Israeli Association.</p>
+                <br>
+                <p>La <strong>PARADISE MEDICAL CLINIC</strong> suntem interesați de sănătatea dumneavoastră orală. Credem că oricine își poate păstra dinții toată viața și ne dedicăm menținerii, reducerii și tratării afecțiunilor dentare. Ne iubim meseria, de aceea ne dedicăm total în găsirea celor mai bune soluții pentru fiecare pacient în parte.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicii" style="background-color: #f1f5f9;">
+        <h2>Ce putem face pentru dumneavoastră</h2>
+        <div class="services-wrapper" id="servicii-slider">
+            
+            <div class="services-grid">
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5c-1.5-1.5-3-2-4.5-2C5 3.5 4 4.5 4 6.5v4c0 2.5 1.5 4.5 3 5.5v3.5c0 1 .5 1.5 1.5 1.5s1.5-.5 1.5-1.5V17h4v2.5c0 1 .5 1.5 1.5 1.5s1.5-.5 1.5-1.5V16c1.5-1 3-3 3-5.5v-4c0-2-1-3-3.5-3-1.5 0-3 .5-4.5 2z"/></svg>
+                    </div>
+                    <h3>Implantologie</h3>
+                    <p>Soluții sigure și durabile pentru înlocuirea eficientă a dinților lipsă.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.272 1.272L21 12l-5.816 1.912a2 2 0 0 0-1.272 1.272L12 21l-1.912-5.816a2 2 0 0 0-1.272-1.272L3 12l5.816-1.912a2 2 0 0 0 1.272-1.272L12 3z"/></svg>
+                    </div>
+                    <h3>Protetică dentară</h3>
+                    <p>Coroane și punți dentare ce restabilesc funcționalitatea și estetica zâmbetului.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </div>
+                    <h3>Chirurgie orală</h3>
+                    <p>Extracții și intervenții chirurgicale complexe realizate confortabil și fără durere.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                    </div>
+                    <h3>Parodontologie</h3>
+                    <p>Tratamente dedicate afecțiunilor gingivale pentru a asigura suportul pe termen lung.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                    </div>
+                    <h3>Endodonție</h3>
+                    <p>Tratamente de canal precise, cu aparatură modernă, pentru salvarea dintelui.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    </div>
+                    <h3>Ortodonție</h3>
+                    <p>Aparate dentare pentru o aliniere perfectă și o mușcăturură corectă.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                    </div>
+                    <h3>Reabilitare orală completă</h3>
+                    <p>Refacerea totală a funcției masticatorii și a zâmbetului prin planuri complexe.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41l-7.59-7.59a2.41 2.41 0 0 0-3.41 0Z"/></svg>
+                    </div>
+                    <h3>Estetică dentară</h3>
+                    <p>Tratamente minim invazive pentru un zâmbet armonios, simetric și natural.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3>Pedodonție</h3>
+                    <p>Stomatologie pentru copii într-un mediu prietenos, cu răbdare și blândețe.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="6.5"/></svg>
+                    </div>
+                    <h3>Fațete zirconiu</h3>
+                    <p>Fațete rezistente și premium pentru o estetică a zâmbetului impecabilă.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    </div>
+                    <h3>Albire dentară</h3>
+                    <p>Un zâmbet mai alb și mai luminos, obținut rapid și în deplină siguranță.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+                    </div>
+                    <h3>Radiografie</h3>
+                    <p>Diagnostic precis și imediat utilizând aparatură radiologică digitală modernă.</p>
+                </div>
+
+            </div>
+            <div class="slider-dots"></div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Ne găsiți în București!</h2>
+        <div class="contact-container">
+            <div class="contact-info">
+                <p>
+                    <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <strong>Telefon:</strong> <a href="tel:0743055769">0743 055 769</a>
+                </p>
+                
+                <p>
+                    <svg class="contact-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <strong>Adresă:</strong> Șoseaua Unirii 178A, Corbeanca, Ilfov
+                </p>
+                <br>
+                <a href="#contact" class="btn">Programează-te acum</a>
+            </div>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2701.0843579925063!2d26.041368199999994!3d44.594376600000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40b21bb2e6e7e059%3A0x8f5046a8c7cd1c58!2sParadise%20Medical%20Clinic%20Stomatologie!5e1!3m2!1sen!2sro!4v1771940227419!5m2!1sen!2sro" width="100%" height="300" style="border:0; border-radius: 12px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="#" class="footer-logo-link" style="margin-bottom: 20px; display: inline-flex;">
+                    <img src="logo.png" alt="Paradise Medical Clinic Logo">
+                    <div class="logo-text">
+                        <span class="name">Paradise Medical Clinic</span>
+                        <span class="title">CLINICĂ STOMATOLOGICĂ</span>
+                    </div>
+                </a>
+                <p>Focusul nostru este să oferim tratamente de calitate. Îngrijire dentară de înaltă calitate pentru un zâmbet sănătos și frumos!</p>
+            </div>
+            <div class="footer-col">
+                <h4>Linkuri Rapide</h4>
+                <ul>
+                    <li><a href="#despre">Despre noi</a></li>
+                    <li><a href="#servicii">Servicii Medicale</a></li>
+                    <li><a href="#contact">Contact & Hartă</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Program Cabinet</h4>
+                <p>Luni - Vineri: 11:00 - 20:00</p>
+                <p>Sâmbătă - Duminică: Închis</p>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p>Tel: <a href="tel:0743055769">0743 055 769</a></p>
+                <p>Șoseaua Unirii 178A, Corbeanca, Ilfov</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Paradise Medical Clinic. Toate drepturile rezervate.</p>
+            <a href="https://sky.ro" target="_blank" rel="noopener noreferrer" style="margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; color: inherit;">
+                Crafted in the clouds by 
+                <img src="skyro.png" alt="Sky.ro" style="height: 24px; width: auto;">
+            </a>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/40720088880" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" style="position: fixed; bottom: 24px; right: 24px; z-index: 50; display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; background-color: #25D366; color: white; border-radius: 9999px; box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4); transition: all 0.3s;" onmouseover="this.style.transform='scale(1.1)';" onmouseout="this.style.transform='scale(1)';">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 32px; height: 32px;">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+    </a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const nav = document.querySelector('nav');
+            const navLinks = document.querySelectorAll('nav ul li a');
+
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                nav.classList.toggle('active');
+                
+                if(nav.classList.contains('active')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    nav.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+
+            if (window.innerWidth <= 768) {
+                const serviciiWrapper = document.getElementById('servicii-slider');
+                if(serviciiWrapper) {
+                    const grid = serviciiWrapper.querySelector('.services-grid');
+                    const dotsContainer = serviciiWrapper.querySelector('.slider-dots');
+                    const cards = grid.children;
+                    
+                    dotsContainer.innerHTML = '';
+                    for(let i = 0; i < cards.length; i++) {
+                        const dot = document.createElement('div');
+                        dot.classList.add('dot');
+                        if(i === 0) dot.classList.add('active');
+                        
+                        dot.addEventListener('click', () => {
+                            grid.scrollTo({ left: grid.clientWidth * i, behavior: 'smooth' });
+                        });
+                        dotsContainer.appendChild(dot);
+                    }
+
+                    const dots = dotsContainer.querySelectorAll('.dot');
+                    grid.addEventListener('scroll', () => {
+                        let index = Math.round(grid.scrollLeft / grid.clientWidth);
+                        dots.forEach(dot => dot.classList.remove('active'));
+                        if (dots[index]) dots[index].classList.add('active');
+                    });
+                }
+            }
+
+            const sliders = document.querySelectorAll('.image-compare-container');
+            
+            sliders.forEach(slider => {
+                const range = slider.querySelector('.slider-range');
+                
+                const updateSlider = (val) => {
+                    slider.style.setProperty('--pos', `${val}%`);
+                };
+
+                range.addEventListener('input', (e) => {
+                    updateSlider(e.target.value);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
